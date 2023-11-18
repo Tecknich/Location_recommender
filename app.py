@@ -17,7 +17,7 @@ def get_place_id(query, api_key):
         types = results[0].get('types', [])
         return types, location
     else:
-        return "No results found"
+        return None, None
 
 
 def search_similar_places(types, location, api_key, radius=5000):
@@ -33,6 +33,9 @@ st.title("Location Recommender")
 
 prompt = st.chat_input("Input place and a location")
 types, location = get_place_id(prompt, api_key)
+if types is None:
+    st.write("No results found")
+
 results = search_similar_places(types, location, api_key)
 
 st.write(results)
