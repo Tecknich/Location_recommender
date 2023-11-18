@@ -2,7 +2,7 @@ import streamlit as st
 from transformers import pipeline
 from PIL import Image
 
-model = pipeline(task="image-classification", model="Tecknich/Test")
+model = pipeline(task="image-classification", model="Tecknich/Test", token="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")
 
 
 def predict(image):
