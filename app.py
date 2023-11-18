@@ -35,7 +35,6 @@ prompt = st.chat_input("Input place and a location")
 types, location = get_place_id(prompt, api_key)
 if types is None:
     st.write("No results found")
-
-results = search_similar_places(types, location, api_key)
-
-st.write(results)
+else:
+    results = search_similar_places(types, location, api_key)
+    st.write(results)
