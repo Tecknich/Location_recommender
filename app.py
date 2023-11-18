@@ -8,7 +8,7 @@ api_key = 'AIzaSyDGPL1I31RJeAnaDnPoTpbfjNjbp7kvYO0'
 
 def get_place_id(query, api_key):
     url = (f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={query}&inputtype=textquery"
-           f"&fields=types, geometry&key={api_key}")
+           f"&fields=types%2Cgeometry&key={api_key}")
 
     response = requests.get(url)
     results = response.json().get('candidates', [])
@@ -32,9 +32,11 @@ def search_similar_places(types, location, api_key, radius=5000):
 st.title("Location Recommender")
 
 prompt = st.chat_input("Input place and a location")
-types, location = get_place_id(prompt, api_key)
-if types is None:
-    st.write("No results found")
-else:
-    results = search_similar_places(types, location, api_key)
-    st.write(results)
+
+if prompt:
+    types, location = get_place_id(prompt, api_key)
+    if types is None:
+        st.write("No results found")
+    else:
+        results = search_similar_places(types, location, api_key)
+        st.write(results)
