@@ -25,4 +25,4 @@ if uploaded_file is not None:
         prediction = predict(image)
 
         for i in range(2):
-            st.write(f"Prediction {i+1}: {prediction[i][0]}, Score: {prediction[i][1]}")
+            st.write(prediction)
