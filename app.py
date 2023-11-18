@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 from transformers import pipeline
-from PIL import Image
 
 model = pipeline(task="automatic-speech-recognition", model="openai/whisper-large-v3")
 api_key = 'AIzaSyDGPL1I31RJeAnaDnPoTpbfjNjbp7kvYO0'
@@ -17,7 +16,7 @@ def get_place_id(query, api_key):
     else:
         return "No results found"
 
-st.title("Test")
+st.title("Location Recommender")
 
 prompt = st.chat_input("Input place")
 
