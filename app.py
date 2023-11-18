@@ -39,4 +39,5 @@ if prompt:
         st.write("No results found")
     else:
         results = search_similar_places(types, location, api_key)
-        st.write(results)
+        place_names = [result['name'] for result in results if 'name' in result]
+        st.write(place_names)
