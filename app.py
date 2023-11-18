@@ -2,7 +2,7 @@ import streamlit as st
 from transformers import pipeline
 from PIL import Image
 
-model = pipeline(task="image-classification", model="dima806/67_cat_breeds_image_detection")
+model = pipeline(task="image-classification", model="sallyanndelucia/resnet_weather_model")
 
 
 def predict(image):
