@@ -2,12 +2,11 @@ import streamlit as st
 import requests
 from transformers import pipeline
 
-model = pipeline(task="automatic-speech-recognition", model="openai/whisper-large-v3")
+model = pipeline("summarization", model="facebook/bart-large-cnn")
 api_key = 'AIzaSyDGPL1I31RJeAnaDnPoTpbfjNjbp7kvYO0'
 
 
 def get_place_id(query, api_key):
-    # Ensure the query is URL encoded
     encoded_query = requests.utils.quote(query)
     url = (f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={encoded_query}&inputtype=textquery"
            f"&fields=types,geometry&key={api_key}")
@@ -40,4 +39,5 @@ if prompt:
     else:
         results = search_similar_places(types, location, api_key)
         place_names = [result['name'] for result in results if 'name' in result]
-        st.write(place_names)
+        summarize = model(results, max_length=130, min_length=30, do_sample=False)
+        st.write(summarize)
