@@ -14,7 +14,8 @@ def get_place_id(query, api_key):
     results = response.json().get('candidates', [])
     if results:
         location = results[0].get('geometry', {}).get('location', {})
-        return results[0].get('types', []), location
+        types = results[0].get('types', [])
+        return types, location
     else:
         return "No results found"
 
@@ -34,4 +35,4 @@ prompt = st.chat_input("Input place and a location")
 types, location = get_place_id(prompt, api_key)
 results = search_similar_places(types, location, api_key)
 
-st.write(type)
+st.write(results)
