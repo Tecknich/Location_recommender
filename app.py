@@ -27,9 +27,28 @@ def search_similar_places(types, location, api_key, radius=5000):
     response = requests.get(url)
     results = response.json().get('results', [])
     return results
+def reverse_geocode(lat, lng, api_key):
+    url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={api_key}"
+    response = requests.get(url)
+    results = response.json().get('results', [])
+    if results:
+        # Attempting to extract the full address and city
+        full_address = results[0].get('formatted_address', 'Unknown Address')
+        city = "Unknown City"
+        for component in results[0]['address_components']:
+            if 'locality' in component['types']:
+                city = component['long_name']
+                break
+            elif 'administrative_area_level_1' in component['types']:
+                city = component['long_name']
+                break
+        return full_address, city
+    else:
+        return "No results found", "Unknown City"
 
 st.title("Location Recommender")
-
+st.text("Input a place, location, or a place and location to receive recommendations based on type of establishment "
+        "and location.")
 prompt = st.text_input("Input place and a location")
 
 if prompt:
@@ -38,5 +57,13 @@ if prompt:
         st.write("No results found")
     else:
         results = search_similar_places(types, location, api_key)
-        place_names = [result['name'] for result in results if 'name' in result]
-        st.write(place_names)
+        for result in results:
+            name = result.get('name')
+            loc = result.get('geometry', {}).get('location')
+            latitude = loc.get('lat') if loc else None
+            longitude = loc.get('lng') if loc else None
+            if latitude and longitude:
+                address, city = reverse_geocode(latitude, longitude, api_key)
+                st.write(f"Name: {name}, Address: {address}, City: {city}")
+            else:
+                st.write(f"Name: {name}, Location: Unknown")
