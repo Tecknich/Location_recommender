@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 from transformers import pipeline
 
-model = pipeline("summarization", model="facebook/bart-large-cnn")
+model = pipeline("text2text-generation", model="RUCAIBox/mtl-data-to-text")
 api_key = 'AIzaSyDGPL1I31RJeAnaDnPoTpbfjNjbp7kvYO0'
 
 
@@ -39,5 +39,4 @@ if prompt:
     else:
         results = search_similar_places(types, location, api_key)
         place_names = [result['name'] for result in results if 'name' in result]
-        summarize = model(results, max_length=130, min_length=30, do_sample=False)
-        st.write(summarize)
+        st.write(place_names)
