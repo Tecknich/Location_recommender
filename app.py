@@ -1,28 +1,26 @@
 import streamlit as st
+import requests
 from transformers import pipeline
 from PIL import Image
 
-model = pipeline(task="image-classification", model="sallyanndelucia/resnet_weather_model")
+model = pipeline(task="automatic-speech-recognition", model="openai/whisper-large-v3")
+api_key = 'AIzaSyDGPL1I31RJeAnaDnPoTpbfjNjbp7kvYO0'
 
+def get_place_id(query, api_key):
+    url = (f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={query}&inputtype=textquery"
+           f"&fields=type&key={api_key}")
 
-def predict(image):
-    predictions = model(image)
-    return {p["label"]: p["score"] for p in predictions}
-
-def load_image(image):
-    img = Image.open(image)
-    return img
+    response = requests.get(url)
+    results = response.json().get('results', [])
+    if results:
+        return results[0].get('type')
+    else:
+        return "No results found"
 
 st.title("Test")
 
-uploaded_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg"])
-if uploaded_file is not None:
-    image = load_image(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
-    st.write("")
+prompt = st.chat_input("Input place")
 
-    if st.button('Predict'):
-        prediction = predict(image)
+type = get_place_id(prompt, api_key)
+st.write(type)
 
-        for i in range(2):
-            st.write(prediction)
