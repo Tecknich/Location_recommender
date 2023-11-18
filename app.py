@@ -7,8 +7,10 @@ api_key = 'AIzaSyDGPL1I31RJeAnaDnPoTpbfjNjbp7kvYO0'
 
 
 def get_place_id(query, api_key):
-    url = (f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={query}&inputtype=textquery"
-           f"&fields=types%2Cgeometry&key={api_key}")
+    # Ensure the query is URL encoded
+    encoded_query = requests.utils.quote(query)
+    url = (f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={encoded_query}&inputtype=textquery"
+           f"&fields=types,geometry&key={api_key}")
 
     response = requests.get(url)
     results = response.json().get('candidates', [])
@@ -19,23 +21,21 @@ def get_place_id(query, api_key):
     else:
         return None, None
 
-
 def search_similar_places(types, location, api_key, radius=5000):
-    # Join types to form a string for the API query
+    location_str = f"{location['lat']},{location['lng']}" if location else ""
     types_query = "|".join(types)
-    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location}&radius={radius}&type={types_query}&key={api_key}"
+    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location_str}&radius={radius}&type={types_query}&key={api_key}"
     response = requests.get(url)
     results = response.json().get('results', [])
     return results
 
-
 st.title("Location Recommender")
 
-prompt = st.chat_input("Input place and a location")
+prompt = st.text_input("Input place and a location")
 
 if prompt:
     types, location = get_place_id(prompt, api_key)
-    if types is None:
+    if not types:
         st.write("No results found")
     else:
         results = search_similar_places(types, location, api_key)
