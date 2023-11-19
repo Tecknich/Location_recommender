@@ -4,6 +4,16 @@ import os
 
 api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 
+st.title("Location Recommender")
+st.markdown("""
+    <div style="margin: 10px; padding: 10px; border: 1px solid #EEE; border-radius: 5px; background-color: #f9f9f9;">
+        <p style="color: #555;">
+            Input a place, location, or a place and location to receive recommendations based on type of establishment 
+            and location.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 # from google.cloud import secretmanager
 
@@ -21,7 +31,7 @@ api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 # api_key = access_secret_version(project_id, secret_id)
 
 def get_place_id(query, api_key):
-    #encoded_query = requests.utils.quote(query)
+    # encoded_query = requests.utils.quote(query)
     url = (
         f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={query}&inputtype=textquery"
         f"&fields=types,geometry&key={api_key}")
@@ -57,38 +67,38 @@ def reverse_geocode(lat, lng, api_key):
         return "No results found", "Unknown City"
 
 
-st.title("Location Recommender")
-st.markdown("""
-    <div style="margin: 10px; padding: 10px; border: 1px solid #EEE; border-radius: 5px; background-color: #f9f9f9;">
-        <p style="color: #555;">
-            Input a place, location, or a place and location to receive recommendations based on type of establishment 
-            and location.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
 prompt = st.text_input("Input place and a location")
 
-if prompt:
-    types, location = get_place_id(prompt, api_key)
-    if not types:
-        st.write("No results found")
-    else:
-        results = search_similar_places(types, location, api_key)
-        for result in results:
-            name = result.get('name')
-            loc = result.get('geometry', {}).get('location')
-            latitude = loc.get('lat') if loc else None
-            longitude = loc.get('lng') if loc else None
-            if latitude and longitude:
-                address = reverse_geocode(latitude, longitude, api_key)
-                st.markdown(
-                    f"""
-                                    <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
-                                        <h4>{name}</h4>
-                                        <p><b>Address:</b> {address}</p>
-                                    </div>
-                                    """,
-                    unsafe_allow_html=True
-                )
-            else:
-                st.write(f"Name: {name}")
+
+def location_recommender(query, api_key):
+    if prompt:
+        types, location = get_place_id(query, api_key)
+        if not types:
+            st.write("No results found")
+        else:
+            results = search_similar_places(types, location, api_key)
+            for i, result in enumerate(results):
+                name = result.get('name')
+                loc = result.get('geometry', {}).get('location')
+                latitude = loc.get('lat') if loc else None
+                longitude = loc.get('lng') if loc else None
+                if latitude and longitude:
+                    address = reverse_geocode(latitude, longitude, api_key)
+                    st.markdown(
+                        f"""
+                                        <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                                            <h4>{name}</h4>
+                                            <p><b>Address:</b> {address}</p>
+                                        </div>
+                                        """,
+                        unsafe_allow_html=True
+                    )
+                    if st.button("Select", key=i):
+                        # When the button is clicked, perform an action
+                        location_recommender(address, api_key)
+
+                else:
+                    st.write(f"Name: {name}")
+
+
+location_recommender(prompt, api_key)
