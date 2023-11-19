@@ -7,7 +7,7 @@ load_dotenv()
 api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 # from google.cloud import secretmanager
 
-st.set_page_config(page_title="Location Recommender")
+#st.set_page_config(page_title="Location Recommender")
 
 # def access_secret_version(project_id, secret_id, version_id="latest"):
 #     client = secretmanager.SecretManagerServiceClient()
@@ -85,12 +85,12 @@ if prompt:
                 address = reverse_geocode(latitude, longitude, api_key)
                 st.markdown(
                     f"""
-                                    <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
-                                        <h4>{name}</h4>
-                                        <p><b>Address:</b> {address}</p>
-                                    </div>
-                                    """,
-                    unsafe_allow_html=True
+                                <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                                    <h4>{name}</h4>
+                                    <p><b>Address:</b> {address}</p>
+                                </div>
+                                """,
+                    unsafe_allow_html=False
                 )
 
             else:
