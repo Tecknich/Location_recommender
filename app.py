@@ -1,20 +1,25 @@
 import streamlit as st
 import requests
-from google.cloud import secretmanager
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+api_key = os.getenv("GOOGLE_MAPS_API_KEY")
+#from google.cloud import secretmanager
 
 st.set_page_config(page_title="Location Recommender")
 
 
-def access_secret_version(project_id, secret_id, version_id="latest"):
-    client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
-    response = client.access_secret_version(request={"name": name})
-    return response.payload.data.decode("UTF-8")
-
-
-project_id = "axiomatic-jet-405520"
-secret_id = "GOOGLE_MAPS_API_KEY"
-api_key = access_secret_version(project_id, secret_id)
+# def access_secret_version(project_id, secret_id, version_id="latest"):
+#     client = secretmanager.SecretManagerServiceClient()
+#     name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+#     response = client.access_secret_version(request={"name": name})
+#     return response.payload.data.decode("UTF-8")
+#
+#
+# project_id = "axiomatic-jet-405520"
+# secret_id = "GOOGLE_MAPS_API_KEY"
+#api_key = access_secret_version(project_id, secret_id)
 
 prompt = st.text_input("Input place and a location")
 
