@@ -23,9 +23,9 @@ api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 # api_key = access_secret_version(project_id, secret_id)
 
 def get_place_id(query, api_key):
-    encoded_query = requests.utils.quote(query)
+    #encoded_query = requests.utils.quote(query)
     url = (
-        f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={encoded_query}&inputtype=textquery"
+        f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={query}&inputtype=textquery"
         f"&fields=types,geometry&key={api_key}")
 
     response = requests.get(url)
