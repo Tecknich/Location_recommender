@@ -21,6 +21,16 @@ st.set_page_config(page_title="Location Recommender")
 # secret_id = "GOOGLE_MAPS_API_KEY"
 #api_key = access_secret_version(project_id, secret_id)
 
+st.title("Location Recommender")
+st.markdown("""
+    <div style="margin: 10px; padding: 10px; border: 1px solid #EEE; border-radius: 5px; background-color: #f9f9f9;">
+        <p style="color: #555;">
+            Input a place, location, or a place and location to receive recommendations based on type of establishment 
+            and location.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
 prompt = st.text_input("Input place and a location")
 
 
@@ -58,16 +68,6 @@ def location_recommender(query, api_key):
             return full_address
         else:
             return "No results found", "Unknown City"
-
-    st.title("Location Recommender")
-    st.markdown("""
-        <div style="margin: 10px; padding: 10px; border: 1px solid #EEE; border-radius: 5px; background-color: #f9f9f9;">
-            <p style="color: #555;">
-                Input a place, location, or a place and location to receive recommendations based on type of establishment 
-                and location.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
 
     if prompt:
         types, location = get_place_id(prompt, api_key)
