@@ -70,7 +70,7 @@ def location_recommender(query, api_key):
             return "No results found", "Unknown City"
 
     if prompt:
-        types, location = get_place_id(prompt, api_key)
+        types, location = get_place_id(query, api_key)
         if not types:
             st.write("No results found")
         else:
