@@ -1,10 +1,10 @@
 import streamlit as st
 import requests
-from transformers import pipeline
+from dotenv import load_dotenv
+import os
 
-model = pipeline("text2text-generation", model="RUCAIBox/mtl-data-to-text")
-api_key = 'AIzaSyDGPL1I31RJeAnaDnPoTpbfjNjbp7kvYO0'
-
+load_dotenv()
+api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 
 def get_place_id(query, api_key):
     encoded_query = requests.utils.quote(query)
