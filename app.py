@@ -3,13 +3,17 @@ import requests
 from dotenv import load_dotenv
 import os
 
+st.set_page_config(page_title="Location Recommender")
+
 load_dotenv()
 api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 
+
 def get_place_id(query, api_key):
     encoded_query = requests.utils.quote(query)
-    url = (f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={encoded_query}&inputtype=textquery"
-           f"&fields=types,geometry&key={api_key}")
+    url = (
+        f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={encoded_query}&inputtype=textquery"
+        f"&fields=types,geometry&key={api_key}")
 
     response = requests.get(url)
     results = response.json().get('candidates', [])
@@ -20,6 +24,7 @@ def get_place_id(query, api_key):
     else:
         return None, None
 
+
 def search_similar_places(types, location, api_key, radius=5000):
     location_str = f"{location['lat']},{location['lng']}" if location else ""
     types_query = "|".join(types)
@@ -27,6 +32,8 @@ def search_similar_places(types, location, api_key, radius=5000):
     response = requests.get(url)
     results = response.json().get('results', [])
     return results
+
+
 def reverse_geocode(lat, lng, api_key):
     url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={api_key}"
     response = requests.get(url)
@@ -37,6 +44,7 @@ def reverse_geocode(lat, lng, api_key):
         return full_address
     else:
         return "No results found", "Unknown City"
+
 
 st.title("Location Recommender")
 st.markdown("""
@@ -61,7 +69,7 @@ if prompt:
             latitude = loc.get('lat') if loc else None
             longitude = loc.get('lng') if loc else None
             if latitude and longitude:
-                address= reverse_geocode(latitude, longitude, api_key)
+                address = reverse_geocode(latitude, longitude, api_key)
                 st.markdown(
                     f"""
                                     <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">

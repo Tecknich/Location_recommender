@@ -12,6 +12,7 @@
 # below:
 .git
 .gitignore
+envars.env
 
 # Python pycache:
 __pycache__/
