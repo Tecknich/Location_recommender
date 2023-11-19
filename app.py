@@ -11,7 +11,7 @@ st.markdown("""
     <div style="margin: 10px; padding: 10px; border: 1px solid #EEE; border-radius: 5px; background-color: #f9f9f9;">
         <p style="color: #555;">
             Input a place, location, or a place and location to receive recommendations based on type of establishment 
-            and location.
+            and location. Additionally, select any of the results to run the algorithm on that result.
         </p>
     </div>
     """, unsafe_allow_html=True)
