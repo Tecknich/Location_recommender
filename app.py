@@ -34,22 +34,13 @@ def reverse_geocode(lat, lng, api_key):
     if results:
         # Attempting to extract the full address and city
         full_address = results[0].get('formatted_address', 'Unknown Address')
-        city = "Unknown City"
-        for component in results[0]['address_components']:
-            if 'locality' in component['types']:
-                city = component['long_name']
-                break
-            elif 'administrative_area_level_1' in component['types']:
-                city = component['long_name']
-                break
-        return full_address, city
+        return full_address
     else:
         return "No results found", "Unknown City"
 
 st.title("Location Recommender")
 st.markdown("""
     <div style="margin: 10px; padding: 10px; border: 1px solid #EEE; border-radius: 5px; background-color: #f9f9f9;">
-        <h3 style="color: #333;">Welcome to the Location Recommender!</h3>
         <p style="color: #555;">
             Input a place, location, or a place and location to receive recommendations based on type of establishment 
             and location.
@@ -70,16 +61,15 @@ if prompt:
             latitude = loc.get('lat') if loc else None
             longitude = loc.get('lng') if loc else None
             if latitude and longitude:
-                address, city = reverse_geocode(latitude, longitude, api_key)
+                address= reverse_geocode(latitude, longitude, api_key)
                 st.markdown(
                     f"""
                                     <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
                                         <h4>{name}</h4>
                                         <p><b>Address:</b> {address}</p>
-                                        <p><b>City:</b> {city}</p>
                                     </div>
                                     """,
                     unsafe_allow_html=True
                 )
             else:
-                st.write(f"Name: {name}, Location: Unknown")
+                st.write(f"Name: {name}")
