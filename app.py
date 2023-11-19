@@ -93,7 +93,7 @@ def location_recommender(query, api_key):
                                         """,
                         unsafe_allow_html=True
                     )
-                    if st.button("Select"):
+                    if st.button("Select",key=latitude+longitude):
                         # When the button is clicked, perform an action
                         location_recommender(address, api_key)
 
