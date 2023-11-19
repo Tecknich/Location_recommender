@@ -77,7 +77,7 @@ def location_recommender(query, api_key):
             st.write("No results found")
         else:
             results = search_similar_places(types, location, api_key)
-            for i, result in enumerate(results):
+            for result in results:
                 name = result.get('name')
                 loc = result.get('geometry', {}).get('location')
                 latitude = loc.get('lat') if loc else None
@@ -93,7 +93,7 @@ def location_recommender(query, api_key):
                                         """,
                         unsafe_allow_html=True
                     )
-                    if st.button("Select", key=i):
+                    if st.button("Select"):
                         # When the button is clicked, perform an action
                         location_recommender(address, api_key)
 
