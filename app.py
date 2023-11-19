@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-#from google.cloud import secretmanager
+from google.cloud import secretmanager
 
 st.title("Location Recommender")
 st.markdown("""
@@ -13,17 +13,17 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 
-# def access_secret_version(project_id, secret_id, version_id="latest"):
-#     client = secretmanager.SecretManagerServiceClient()
-#     name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
-#     response = client.access_secret_version(request={"name": name})
-#     return response.payload.data.decode("UTF-8")
-#
-#
-# project_id = "axiomatic-jet-405520"
-# secret_id = "GOOGLE_MAPS_API_KEY"
-# api_key = access_secret_version(project_id, secret_id)
-api_key = 'AIzaSyBwqu2bKbalxD2n8MoFYS9dRjQfAnlCcPo'
+def access_secret_version(project_id, secret_id, version_id="latest"):
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+    response = client.access_secret_version(request={"name": name})
+    return response.payload.data.decode("UTF-8")
+
+
+project_id = "axiomatic-jet-405520"
+secret_id = "GOOGLE_MAPS_API_KEY"
+api_key = access_secret_version(project_id, secret_id)
+#api_key = 'AIzaSyBwqu2bKbalxD2n8MoFYS9dRjQfAnlCcPo'
 
 def get_place_id(query, api_key):
     encoded_query = requests.utils.quote(query)
