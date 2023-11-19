@@ -2,9 +2,6 @@ import streamlit as st
 import requests
 from google.cloud import secretmanager
 
-# import os
-
-# api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 st.set_page_config(page_title="Location Recommender")
 
 st.title("Location Recommender")
