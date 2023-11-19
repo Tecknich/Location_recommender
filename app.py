@@ -2,8 +2,6 @@ import streamlit as st
 import requests
 from google.cloud import secretmanager
 
-st.set_page_config(page_title="Location Recommender")
-
 st.title("Location Recommender")
 st.markdown("""
     <div style="margin: 10px; padding: 10px; border: 1px solid #EEE; border-radius: 5px; background-color: #f9f9f9;">
