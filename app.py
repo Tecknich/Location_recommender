@@ -5,10 +5,9 @@ import os
 
 load_dotenv()
 api_key = os.getenv("GOOGLE_MAPS_API_KEY")
-#from google.cloud import secretmanager
+# from google.cloud import secretmanager
 
 st.set_page_config(page_title="Location Recommender")
-
 
 # def access_secret_version(project_id, secret_id, version_id="latest"):
 #     client = secretmanager.SecretManagerServiceClient()
@@ -19,7 +18,7 @@ st.set_page_config(page_title="Location Recommender")
 #
 # project_id = "axiomatic-jet-405520"
 # secret_id = "GOOGLE_MAPS_API_KEY"
-#api_key = access_secret_version(project_id, secret_id)
+# api_key = access_secret_version(project_id, secret_id)
 
 st.title("Location Recommender")
 st.markdown("""
@@ -71,35 +70,28 @@ def reverse_geocode(lat, lng, api_key):
         return "No results found", "Unknown City"
 
 
-def location_recommender(query, api_key):
-    if prompt:
-        types, location = get_place_id(query, api_key)
-        if not types:
-            st.write("No results found")
-        else:
-            results = search_similar_places(types, location, api_key)
-            for i, result in enumerate(results):
-                name = result.get('name')
-                loc = result.get('geometry', {}).get('location')
-                latitude = loc.get('lat') if loc else None
-                longitude = loc.get('lng') if loc else None
-                if latitude and longitude:
-                    address = reverse_geocode(latitude, longitude, api_key)
-                    st.markdown(
-                        f"""
-                                        <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
-                                            <h4>{name}</h4>
-                                            <p><b>Address:</b> {address}</p>
-                                        </div>
-                                        """,
-                        unsafe_allow_html=True
-                    )
-                    if st.button("Select", key=i):
-                        # When the button is clicked, perform an action
-                        location_recommender(address, api_key)
+if prompt:
+    types, location = get_place_id(prompt, api_key)
+    if not types:
+        st.write("No results found")
+    else:
+        results = search_similar_places(types, location, api_key)
+        for i, result in enumerate(results):
+            name = result.get('name')
+            loc = result.get('geometry', {}).get('location')
+            latitude = loc.get('lat') if loc else None
+            longitude = loc.get('lng') if loc else None
+            if latitude and longitude:
+                address = reverse_geocode(latitude, longitude, api_key)
+                st.markdown(
+                    f"""
+                                    <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                                        <h4>{name}</h4>
+                                        <p><b>Address:</b> {address}</p>
+                                    </div>
+                                    """,
+                    unsafe_allow_html=True
+                )
 
-                else:
-                    st.write(f"Name: {name}")
-
-
-location_recommender(prompt, api_key)
+            else:
+                st.write(f"Name: {name}")
