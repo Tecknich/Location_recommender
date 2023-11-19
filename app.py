@@ -5,6 +5,7 @@ from google.cloud import secretmanager
 # import os
 
 # api_key = os.getenv("GOOGLE_MAPS_API_KEY")
+st.set_page_config(page_title="Location Recommender")
 
 st.title("Location Recommender")
 st.markdown("""
@@ -15,8 +16,6 @@ st.markdown("""
         </p>
     </div>
     """, unsafe_allow_html=True)
-
-st.set_page_config(page_title="Location Recommender")
 
 
 def access_secret_version(project_id, secret_id, version_id="latest"):
